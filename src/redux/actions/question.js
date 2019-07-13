@@ -2,13 +2,13 @@ import axios from 'axios'
 
 import { url } from '../../config/config'
 
-export const question = () => {
+export const question = (number) => {
     return {
         type: "GET_QUESTION",
 
         payload: axios({
             method: 'GET',
-            url: `${url.axios}/questions/${1}`
+            url: `${url.axios}/questions/${number}`
         })
     }
 }

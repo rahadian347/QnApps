@@ -109,7 +109,7 @@ class Form extends Component {
                         </Item>
                         <View style={{ marginVertical: 40, flexDirection: 'row', width: '100%', alignItems: "flex-end", justifyContent: 'flex-end' }}>
                             <Button onPress={this.register} iconLeft bordered style={{ borderWidth: 1, borderColor: '#f96d15', paddingHorizontal: 5 }}>
-                                <Icon name='home' style={{ marginLeft: 0, paddingRight: 3, color: '#f96d15' }} />
+                                <Icon name='md-checkmark-circle' style={{ marginLeft: 0, paddingRight: 3, color: '#f96d15' }} />
                                 <Text style={{ fontFamily: 'Roboto', color: '#f96d15' }}>Let's Go</Text>
                             </Button>
                         </View>

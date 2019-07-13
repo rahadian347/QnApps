@@ -6,6 +6,7 @@ import { Container, Input, Content, Form, Textarea, Card, CardItem, Body, Text,
 import { } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { color } from '../../styles/baseColor'
+import CountDown from 'react-native-countdown-component';
 
 import * as actionQuestion from '../../redux/actions/question'
 
@@ -15,7 +16,8 @@ class Question extends Component {
         this.state = {
             isLoading: false,
             isError: false,
-            userId: ''
+            userId: '',
+            number: 1,
         }
 
 
@@ -26,9 +28,16 @@ class Question extends Component {
         this.setState({
             userId
         })
+        console.log(this.props.number)
+        if(this.state.number <= 1) {
+            this.props.question(this.state.number)
+        }
 
-        this.props.question()
+    }
 
+    nextQuestion = (number) => {
+
+        this.props.question(number + 1)
     }
 
 
@@ -61,7 +70,15 @@ class Question extends Component {
                                 paddingHorizontal: 20
                             }}>
                                 <Text style={{ fontWeight: '500', fontFamily: 'Roboto', color: color.orange }}>{`Question ${question.number}`}</Text>
-                                <Text style={{ fontWeight: '500', fontFamily: 'Roboto', color: color.orange }}>{`Time ${question.timer}`}</Text>
+                                {question.timer == 0 ? <Text> </Text> : 
+                                <CountDown
+                                    until={question.timer * 60}
+                                    timeToShow={['M', 'S']}
+                                    onFinish={() => alert('finished')}
+                                    onPress={() => alert('hello')}
+                                    digitStyle={{ backgroundColor: color.orange }}
+                                    size={12}
+                                />}
                             </View>
                             <View style={{ marginHorizontal: 10, marginTop: 10  }}>
                                 <Card >
@@ -75,15 +92,21 @@ class Question extends Component {
                         </View>
 
                         <View style={{ flex: 0.7, backgroundColor: 'transparent' }}>
-                            <Form style={{ marginHorizontal: 10 }}>
-                                <Textarea rowSpan={5} bordered placeholder="fill your answer here.."
-                                    style={{
-                                        borderRadius: 10,
-                                        borderColor: color.orange
-                                    }} />
-                            </Form>
+
+                           {
+                                question.type == 'text' ? 
+                                <Form style={{ marginHorizontal: 10 }}>
+                                    <Textarea rowSpan={5} bordered placeholder="fill your answer here.."
+                                        style={{
+                                            borderRadius: 10,
+                                            borderColor: color.orange
+                                        }} />
+                                </Form> :
+                                <Text>Nanti Ini multiple</Text>
+                           }
+
                            <View style={{flex: 1,backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                <Button transparent>
+                                <Button onPress={()=>{this.nextQuestion(question.number)}} transparent>
                                     <Text style={{ color: color.orange, fontWeight: '500' }}>NEXT</Text>
                                 </Button>
                            </View>
@@ -98,13 +121,13 @@ class Question extends Component {
 }
 const mapStateToProps = state => {
     return {
-        questions: state.question
+        questions: state.question,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        question: () => dispatch(actionQuestion.question())
+        question: (number) => dispatch(actionQuestion.question(number))
     }
 }
 

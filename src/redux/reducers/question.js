@@ -1,7 +1,7 @@
 
 
 const initialState = {
-    questions: []
+    questions: [],
 }
 
 export default function question(state = initialState, action) {
@@ -13,7 +13,7 @@ export default function question(state = initialState, action) {
         case "GET_QUESTION_FULFILLED":
             return {
                 ...state,
-                questions: action.payload.data.data
+                questions: action.payload.data.data,
             };
         default:
             return state

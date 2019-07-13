@@ -4,6 +4,7 @@ import { createStackNavigator, createAppContainer, createSwitchNavigator } from 
 import Loading from '../screens/Loading/Loading'
 import Form from '../screens/Form'
 import Question from '../screens/Question'
+import Welcome from '../screens/Welcome'
 
 const Initial = createStackNavigator({
     Loading: {
@@ -17,6 +18,12 @@ const Initial = createStackNavigator({
 const App = createStackNavigator({
     Form: {
         screen : Form,
+        navigationOptions : ({navigation}) => ({
+            header: null
+        })
+    },
+    Welcome: {
+        screen : Welcome,
         navigationOptions : ({navigation}) => ({
             header: null
         })

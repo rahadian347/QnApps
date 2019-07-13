@@ -28,7 +28,7 @@ class Form extends Component {
             let userId = this.props.data.data.id.toString()
             AsyncStorage.setItem('userId', userId)
 
-            this.props.navigation.navigate('Question')
+            this.props.navigation.navigate('Welcome')
         }
     }
 

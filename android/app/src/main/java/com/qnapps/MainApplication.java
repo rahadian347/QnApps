@@ -1,4 +1,4 @@
-package com.rnstarter;
+package com.qnapps;
 
 import android.app.Application;
 

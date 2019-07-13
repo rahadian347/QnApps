@@ -2,7 +2,8 @@ import { createStackNavigator, createAppContainer, createSwitchNavigator } from 
 
 
 import Loading from '../screens/Loading/Loading'
-import Welcome from '../screens/Welcome/Welcome'
+import Form from '../screens/Form'
+import Question from '../screens/Question'
 
 const Initial = createStackNavigator({
     Loading: {
@@ -14,15 +15,21 @@ const Initial = createStackNavigator({
 })
 
 const App = createStackNavigator({
-    Welcome: {
-        screen : Welcome,
+    Form: {
+        screen : Form,
         navigationOptions : ({navigation}) => ({
             header: null
         })
-    }
+    },
+    Question: {
+        screen : Question,
+        navigationOptions : ({navigation}) => ({
+            header: null
+        })
+    },
 },
 {
-    initialRouteName: 'Welcome'
+    initialRouteName: 'Question'
 })
 
 const RootNavigation = createAppContainer(createSwitchNavigator(
@@ -32,8 +39,8 @@ const RootNavigation = createAppContainer(createSwitchNavigator(
     },
     {
 
-        initialRouteName: 'Initial',
-        resetOnBlur: true,
+        initialRouteName: 'App',
+        resetOnBlur: false,
     }
 ));
 

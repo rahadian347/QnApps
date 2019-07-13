@@ -102,7 +102,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.rnstarter"
+        applicationId "com.qnapps"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

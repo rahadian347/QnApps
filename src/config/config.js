@@ -1,3 +1,3 @@
 export const url = {
-    server : 'http://192.168.0.18/'
+    axios : 'http://192.168.1.114:3333/api/v1'
 }

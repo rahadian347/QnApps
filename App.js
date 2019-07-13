@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { Provider,connect } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
 import { ActivityIndicator } from "react-native"
 
 import { createReduxContainer } from 'react-navigation-redux-helpers'
 
 import RootNavigation from './src/navigations/RootNavigation'
 
-import { store,persistor } from './src/redux/store'
+import { store } from './src/redux/store'
 
 
 import { YellowBox } from 'react-native'
@@ -27,9 +26,7 @@ class App extends Component {
     YellowBox.ignoreWarnings(['Warning: Async Storage has been extracted from react-native core']);  // <- insert the warning text here you wish to hide.
     return (  
       <Provider store={store}>
-        <PersistGate loading={<ActivityIndicator />} persistor={persistor}>
           <AppWithNavigationState />
-        </PersistGate>
       </Provider>
     )
   }

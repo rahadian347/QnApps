@@ -5,7 +5,7 @@ import {globalStyles} from '../../styles/globalStyles'
 export default class Loading extends Component {
     componentDidMount() {
         setTimeout(() => {
-            this.props.navigation.navigate("Welcome")
+            this.props.navigation.navigate("Form")
         },500)
     }
     render() {

@@ -1,12 +1,15 @@
 import { createNavigationReducer } from 'react-navigation-redux-helpers';
+import { combineReducers } from 'redux';
 import RootNavigation from './../../navigations/RootNavigation';
-import example from './example';
+import register from './register';
+import question from './question';
 
 const router = createNavigationReducer(RootNavigation);
 
-const appReducer = {
+const appReducer = combineReducers({
   router,
-  example,
-}
+  register,
+  question
+})
 
 export default appReducer

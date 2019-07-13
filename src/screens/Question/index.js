@@ -1,14 +1,18 @@
 
 import React, { Component } from 'react'
-import { View, AsyncStorage } from 'react-native'
-import { Container, Input, Content, Form, Textarea, Card, CardItem, Body, Text,
-        Button } from 'native-base'
-import { } from 'react-native-elements'
+import { View, AsyncStorage, FlatList, ActivityIndicator } from 'react-native'
+import {
+    Container, Input, Content, Form, Textarea, Card, CardItem, Body, Text,
+    Button
+} from 'native-base'
+import SelectMultiple from 'react-native-select-multiple'
+import { Icon } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { color } from '../../styles/baseColor'
 import CountDown from 'react-native-countdown-component';
 
 import * as actionQuestion from '../../redux/actions/question'
+import * as actionAnswer from '../../redux/actions/answer'
 
 class Question extends Component {
     constructor(props) {
@@ -18,6 +22,9 @@ class Question extends Component {
             isError: false,
             userId: '',
             number: 1,
+            answer: '',
+            selectedAnswer: [],
+            attachment: ''
         }
 
 
@@ -28,22 +35,49 @@ class Question extends Component {
         this.setState({
             userId
         })
-        console.log(this.props.number)
-        if(this.state.number <= 1) {
+        if (this.state.number <= 1) {
             this.props.question(this.state.number)
         }
 
     }
 
-    nextQuestion = (number) => {
+    nextQuestion = (number, question_id, user_id, answer, attachment) => {
 
         this.props.question(number + 1)
+        this.props.answer({
+
+            question_id,
+            user_id,
+            answer,
+            attachment
+        })
+        this.setState({
+            answer: '',
+            attachment: '',
+            selectedAnswer: []
+        })
     }
+
+    onSelectionsChange = (selectedAnswer) => {
+        this.setState({ selectedAnswer })
+        console.log(this.state.selectedAnswer)
+    }
+
 
 
 
     render() {
         let question = this.props.questions.questions
+
+
+        if (question.options == undefined) {
+            return (
+                <ActivityIndicator size={"large"} />
+            )
+
+        }
+        let option = question.options.split(", ")
+        console.log(option)
         return (
             <Container>
                 <Content padder contentContainerStyle={{
@@ -70,17 +104,17 @@ class Question extends Component {
                                 paddingHorizontal: 20
                             }}>
                                 <Text style={{ fontWeight: '500', fontFamily: 'Roboto', color: color.orange }}>{`Question ${question.number}`}</Text>
-                                {question.timer == 0 ? <Text> </Text> : 
-                                <CountDown
-                                    until={question.timer * 60}
-                                    timeToShow={['M', 'S']}
-                                    onFinish={() => alert('finished')}
-                                    onPress={() => alert('hello')}
-                                    digitStyle={{ backgroundColor: color.orange }}
-                                    size={12}
-                                />}
+                                {question.timer == 0 ? <Text> </Text> :
+                                    <CountDown
+                                        until={question.timer * 60}
+                                        timeToShow={['M', 'S']}
+                                        onFinish={() => this.nextQuestion(question.number, question.id, this.state.userId, this.state.selectedAnswer, this.state.attachment)}
+                                        onPress={() => this.nextQuestion(question.number, question.id, this.state.userId, this.state.selectedAnswer, this.state.attachment)}
+                                        digitStyle={{ backgroundColor: color.orange }}
+                                        size={12}
+                                    />}
                             </View>
-                            <View style={{ marginHorizontal: 10, marginTop: 10  }}>
+                            <View style={{ marginHorizontal: 10, marginTop: 10 }}>
                                 <Card >
                                     <CardItem >
                                         <Body>
@@ -93,29 +127,61 @@ class Question extends Component {
 
                         <View style={{ flex: 0.7, backgroundColor: 'transparent' }}>
 
-                           {
-                                question.type == 'text' ? 
-                                <Form style={{ marginHorizontal: 10 }}>
-                                    <Textarea rowSpan={5} bordered placeholder="fill your answer here.."
-                                        style={{
-                                            borderRadius: 10,
-                                            borderColor: color.orange
-                                        }} />
-                                </Form> :
-                                <Text>Nanti Ini multiple</Text>
-                           }
+                            {
+                                question.type == 'text' ?
+                                    <Form style={{ marginHorizontal: 10 }}>
+                                        <Textarea rowSpan={5} bordered placeholder="fill your answer here.."
+                                            onChangeText={(answer) => this.setState({ answer })}
+                                            value={this.state.answer}
+                                            style={{
+                                                borderRadius: 10,
+                                                borderColor: color.orange
+                                            }} />
+                                    </Form>
+                                    :
+                                    (question.type == 'multi select') ?
+                                        <SelectMultiple
+                                            items={option}
+                                            keyExtractor={(item, index) => (item, index).toString()}
+                                            selectedItems={this.state.selectedAnswer}
+                                            onSelectionsChange={this.onSelectionsChange} />
 
-                           <View style={{flex: 1,backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                <Button onPress={()=>{this.nextQuestion(question.number)}} transparent>
+                                        : (question.type == 'multi choice') ?
+                                            <Text>multiple choice</Text>
+                                            :
+                                            <Icon
+                                                reverse
+                                                name='record-rec'
+                                                size={30}
+                                                type='material-community'
+                                                color='#45969b'
+                                                containerStyle={{ justifyContent: 'flex-end', alignSelf: 'flex-end', padding: 5 }}
+                                                onPress={() => alert("record")}
+                                            />
+
+                            }
+
+                            <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                <Button
+                                    onPress={() => {
+                                        question.type == 'text' ?
+                                            this.nextQuestion(question.number, question.id, this.state.userId, this.state.answer, this.state.attachment)
+                                            : question.type == 'multi select' || question.type == 'multi choice' ?
+                                                this.nextQuestion(question.number, question.id, this.state.userId, this.state.selectedAnswer, this.state.attachment)
+                                                : <Text>Record</Text>
+                                    }
+                                    }
+                                    transparent>
                                     <Text style={{ color: color.orange, fontWeight: '500' }}>NEXT</Text>
                                 </Button>
-                           </View>
+                            </View>
                         </View>
 
                     </View>
                 </Content>
             </Container>
         )
+
     }
 
 }
@@ -127,7 +193,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        question: (number) => dispatch(actionQuestion.question(number))
+        question: (number) => dispatch(actionQuestion.question(number)),
+        answer: (question_id, user_id, answer, attachment) => dispatch(actionAnswer.answer(question_id, user_id, answer, attachment))
     }
 }
 

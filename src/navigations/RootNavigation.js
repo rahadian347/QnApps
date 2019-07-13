@@ -29,7 +29,7 @@ const App = createStackNavigator({
     },
 },
 {
-    initialRouteName: 'Question'
+    initialRouteName: 'Form'
 })
 
 const RootNavigation = createAppContainer(createSwitchNavigator(
@@ -39,7 +39,7 @@ const RootNavigation = createAppContainer(createSwitchNavigator(
     },
     {
 
-        initialRouteName: 'App',
+        initialRouteName: 'Initial',
         resetOnBlur: false,
     }
 ));

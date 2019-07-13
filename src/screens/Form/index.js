@@ -94,16 +94,16 @@ class Form extends Component {
                             <Text style={{ fontFamily: 'Roboto', fontSize: 24, }}>Fill the form to continue</Text>
                         </View>
                     </View>
-                    <View style={{ backgroundColor: '#f8f8f8', flex: 0.6, paddingHorizontal: 40, paddingTop: 60, alignItems: 'center' }}>
+                    <View style={{ backgroundColor: '#f8f8f8', flex: 0.6, paddingHorizontal: 30, paddingTop: 60, alignItems: 'center' }}>
                         <Item>
                             <Icon active name='user' style={{ fontSize: 20, color: '#58BEC9' }} type="SimpleLineIcons" />
                             <Input placeholder='who are you ?' onChangeText={text => this.onChange(text, 'name')} />
                         </Item>
-                        <Item>
+                        <Item style={{marginTop: 20}}>
                             <Icon active name='email' type='MaterialCommunityIcons' style={{ fontSize: 20, color: '#58BEC9' }} />
                             <Input placeholder="what's your email" onChangeText={text => this.onChange(text, 'email')} />
                         </Item>
-                        <Item>
+                        <Item style={{marginTop: 20}}>
                             <Icon active name='cellphone' style={{ fontSize: 20, color: '#58BEC9' }} type="MaterialCommunityIcons" />
                             <Input placeholder="what's your cellphone number ?" onChangeText={text => this.onChange(text, 'phone_number')} />
                         </Item>

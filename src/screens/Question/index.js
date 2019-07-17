@@ -6,13 +6,18 @@ import {
     Button
 } from 'native-base'
 import SelectMultiple from 'react-native-select-multiple'
-import { Icon } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { color } from '../../styles/baseColor'
 import CountDown from 'react-native-countdown-component';
 
 import * as actionQuestion from '../../redux/actions/question'
 import * as actionAnswer from '../../redux/actions/answer'
+
+import TextAnswer from './TextAnswer'
+import MultiSelectAnswer from './MultiSelectAnswer';
+import MultiChoiceAnswer from './MultiChoiceAnswer';
+import RecordAnswer from './RecordAnswer';
+
 
 class Question extends Component {
     constructor(props) {
@@ -21,63 +26,39 @@ class Question extends Component {
             isLoading: false,
             isError: false,
             userId: '',
-            number: 1,
-            answer: '',
-            selectedAnswer: [],
-            attachment: ''
         }
 
 
     }
+
+
 
     async componentDidMount() {
         const userId = await AsyncStorage.getItem('userId')
         this.setState({
-            userId
+            userId,
         })
-        if (this.state.number <= 1) {
-            this.props.question(this.state.number)
-        }
+        this.props.question(this.props.questions.page)
+
 
     }
-
-    nextQuestion = (number, question_id, user_id, answer, attachment) => {
-
-        this.props.question(number + 1)
-        this.props.answer({
-
-            question_id,
-            user_id,
-            answer,
-            attachment
-        })
-        this.setState({
-            answer: '',
-            attachment: '',
-            selectedAnswer: []
-        })
-    }
-
-    onSelectionsChange = (selectedAnswer) => {
-        this.setState({ selectedAnswer })
-        console.log(this.state.selectedAnswer)
-    }
-
-
 
 
     render() {
-        let question = this.props.questions.questions
 
+        let question = {}
+        console.log(this.props.questions.page)
 
-        if (question.options == undefined) {
-            return (
-                <ActivityIndicator size={"large"} />
-            )
+        if (this.props.questions.isSuccess) {
+            question = this.props.questions.questions
+
+            this.props.questions.isSuccess = false
 
         }
-        let option = question.options.split(", ")
-        console.log(option)
+
+
+
+
         return (
             <Container>
                 <Content padder contentContainerStyle={{
@@ -108,8 +89,8 @@ class Question extends Component {
                                     <CountDown
                                         until={question.timer * 60}
                                         timeToShow={['M', 'S']}
-                                        onFinish={() => this.nextQuestion(question.number, question.id, this.state.userId, this.state.selectedAnswer, this.state.attachment)}
-                                        onPress={() => this.nextQuestion(question.number, question.id, this.state.userId, this.state.selectedAnswer, this.state.attachment)}
+                                        onFinish={() => this.props.question(this.props.questions.page)}
+                                        onPress={() => this.props.question(this.props.questions.page)}
                                         digitStyle={{ backgroundColor: color.orange }}
                                         size={12}
                                     />}
@@ -125,56 +106,13 @@ class Question extends Component {
                             </View>
                         </View>
 
-                        <View style={{ flex: 0.7, backgroundColor: 'transparent' }}>
+                        <View>
+                            {this.props.questions.questions && this.props.questions.questions.type == 'text' && <TextAnswer />}
+                            {this.props.questions.questions && this.props.questions.questions.type == 'multi select' && <MultiSelectAnswer />}
+                            {this.props.questions.questions && this.props.questions.questions.type == 'multi choice' && <MultiChoiceAnswer />}
+                            {this.props.questions.questions && this.props.questions.questions.type == 'record' && <RecordAnswer />}
 
-                            {
-                                question.type == 'text' ?
-                                    <Form style={{ marginHorizontal: 10 }}>
-                                        <Textarea rowSpan={5} bordered placeholder="fill your answer here.."
-                                            onChangeText={(answer) => this.setState({ answer })}
-                                            value={this.state.answer}
-                                            style={{
-                                                borderRadius: 10,
-                                                borderColor: color.orange
-                                            }} />
-                                    </Form>
-                                    :
-                                    (question.type == 'multi select') ?
-                                        <SelectMultiple
-                                            items={option}
-                                            keyExtractor={(item, index) => (item, index).toString()}
-                                            selectedItems={this.state.selectedAnswer}
-                                            onSelectionsChange={this.onSelectionsChange} />
 
-                                        : (question.type == 'multi choice') ?
-                                            <Text>multiple choice</Text>
-                                            :
-                                            <Icon
-                                                reverse
-                                                name='record-rec'
-                                                size={30}
-                                                type='material-community'
-                                                color='#45969b'
-                                                containerStyle={{ justifyContent: 'flex-end', alignSelf: 'flex-end', padding: 5 }}
-                                                onPress={() => alert("record")}
-                                            />
-
-                            }
-
-                            <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                <Button
-                                    onPress={() => {
-                                        question.type == 'text' ?
-                                            this.nextQuestion(question.number, question.id, this.state.userId, this.state.answer, this.state.attachment)
-                                            : question.type == 'multi select' || question.type == 'multi choice' ?
-                                                this.nextQuestion(question.number, question.id, this.state.userId, this.state.selectedAnswer, this.state.attachment)
-                                                : <Text>Record</Text>
-                                    }
-                                    }
-                                    transparent>
-                                    <Text style={{ color: color.orange, fontWeight: '500' }}>NEXT</Text>
-                                </Button>
-                            </View>
                         </View>
 
                     </View>

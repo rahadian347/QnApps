@@ -18,17 +18,3 @@ export const answer = ({question_id, user_id, answer, attachment}) => {
        
     }
 }
-
-// return {
-//     type: types.REGISTER,
-//     payload: axios({
-//         method: 'POST',
-//         url: `${url.axios}/auth/register`,
-//         data: {
-//             username,
-//             email,
-//             password,
-//             confirm_password
-//         }
-//     })
-// }

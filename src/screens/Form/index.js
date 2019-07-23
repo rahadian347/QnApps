@@ -28,7 +28,7 @@ class Form extends Component {
             let userId = this.props.data.data.id.toString()
             AsyncStorage.setItem('userId', userId)
 
-            this.props.navigation.navigate('Question')
+            this.props.navigation.navigate('Welcome')
         }
     }
 
@@ -108,9 +108,9 @@ class Form extends Component {
                             <Input placeholder="what's your cellphone number ?" onChangeText={text => this.onChange(text, 'phone_number')} />
                         </Item>
                         <View style={{ marginVertical: 40, flexDirection: 'row', width: '100%', alignItems: "flex-end", justifyContent: 'flex-end' }}>
-                            <Button onPress={this.register} iconLeft bordered style={{ borderWidth: 1, borderColor: '#f96d15', paddingHorizontal: 5 }}>
-                                <Icon name='md-checkmark-circle' style={{ marginLeft: 0, paddingRight: 3, color: '#f96d15' }} />
-                                <Text style={{ fontFamily: 'Roboto', color: '#f96d15' }}>Let's Go</Text>
+                            <Button onPress={this.register} iconLeft bordered style={{ backgroundColor:'#f96d15',borderWidth: 1, borderColor: '#f96d15', paddingHorizontal: 5 }}>
+                                <Icon name='md-checkmark-circle' style={{ marginLeft: 0, paddingRight: 4, color: '#f8f8f8' }} />
+                                <Text style={{ fontFamily: 'Roboto', color: '#f8f8f8' }}>Let's Go</Text>
                             </Button>
                         </View>
                     </View>

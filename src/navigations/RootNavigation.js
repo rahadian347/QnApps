@@ -36,7 +36,7 @@ const App = createStackNavigator({
     },
 },
 {
-    initialRouteName: 'Form'
+    initialRouteName: 'Welcome'
 })
 
 const RootNavigation = createAppContainer(createSwitchNavigator(
